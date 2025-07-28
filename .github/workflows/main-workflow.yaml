@@ -1,7 +1,7 @@
 name: main-workflow
 on: 
   workflow_dispatch:
-  jobs:
+jobs:
     backup:
       runs-on: ubuntu-latest
       steps:
@@ -20,16 +20,15 @@ on:
           working-directory: terraform
           run : |
             terraform init
-          success(): true
 
         - name: plan terraform
           working-directory: terraform
           run: |
             terraform plan -out=tfplan
-          success(): true
+          if: ${{ success() }}
 
         - name: apply terraform
           working-directory: terraform
           run: |
             terraform apply -auto-approve tfplan
-          success(): true
+          if: ${{ success() }}
