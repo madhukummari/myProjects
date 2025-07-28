@@ -1,0 +1,35 @@
+name: main-workflow
+on: 
+  workflow_dispatch:
+  jobs:
+    backup:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
+        
+        - name: aws-cli setup
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+            aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+            aws-region: us-east-1
+          
+
+        - name: initialize terraform
+          working-directory: terraform
+          run : |
+            terraform init
+          success(): true
+
+        - name: plan terraform
+          working-directory: terraform
+          run: |
+            terraform plan -out=tfplan
+          success(): true
+
+        - name: apply terraform
+          working-directory: terraform
+          run: |
+            terraform apply -auto-approve tfplan
+          success(): true
