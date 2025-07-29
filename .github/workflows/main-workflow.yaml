@@ -35,5 +35,5 @@ jobs:
         - name: apply terraform
           working-directory: terraform
           run: |
-            terraform apply -auto-approve tfplan
+            terraform destroy -auto-approve
           if: ${{ success() }}
