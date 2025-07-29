@@ -16,7 +16,7 @@ resource "aws_backup_plan" "main" {
 }
 
 resource "aws_backup_selection" "tag_selection" {
-  iam_role_arn = "arn:aws:iam::ACCOUNT_ID:role/service-role/AWSBackupDefaultServiceRole"
+  iam_role_arn = "arn:aws:iam::027694487790:role/service-role/AWSBackupDefaultServiceRole"
   name         = "backup-tagged-resources"
   plan_id      = aws_backup_plan.main.id
 
