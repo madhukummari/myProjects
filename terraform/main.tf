@@ -1,8 +1,8 @@
-resource "aws_backup_vault" "main" {
+resource "aws_backup_vault" "my_vault-terraform" {
   name = "my-backup-vault"
 }
 
-resource "aws_backup_plan" "main" {
+resource "aws_backup_plan" "mybackup_plan" {
   name = "ec2-ebs-backup-plan"
 
   rule {
