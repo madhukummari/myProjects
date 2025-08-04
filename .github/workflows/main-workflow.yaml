@@ -31,12 +31,12 @@ jobs:
           run: |
             terraform plan -out=tfplan
 
-        - name: apply terraform
-          working-directory: terraform
-          run: |
-            terraform apply -auto-approve tfplan
-
-        # - name: destroy terraform
+        # - name: apply terraform
         #   working-directory: terraform
         #   run: |
-        #     terraform destroy -auto-approve
+        #     terraform apply -auto-approve tfplan
+
+        - name: destroy terraform
+          working-directory: terraform
+          run: |
+            terraform destroy -auto-approve
