@@ -36,9 +36,9 @@ resource "aws_instance" "web" {
 
   user_data = <<-EOF
               #!/bin/bash
-              mkfs -t ext4 /dev/xvdf
+              mkfs -t ext4 /dev/xvdbb
               mkdir /data
-              mount /dev/xvdf /data
+              mount /dev/xvdbb /data
               echo "Mounted volume and created directory" > /data/setup.txt
               EOF
 
