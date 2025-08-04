@@ -38,8 +38,8 @@ jobs:
             terraform apply -auto-approve tfplan
           if: ${{ success() }}
 
-        - name: destroy terraform
-          working-directory: terraform
-          run: |
-            terraform destroy -auto-approve tfplan
-          if: ${{ success() }}
+        # - name: destroy terraform
+        #   working-directory: terraform
+        #   run: |
+        #     terraform destroy -auto-approve tfplan
+        #   if: ${{ success() }}
