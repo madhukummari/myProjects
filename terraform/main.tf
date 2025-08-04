@@ -32,6 +32,7 @@ resource "aws_instance" "web" {
   ami           = "ami-020cba7c55df1f615" # Amazon Linux 2
   instance_type = "t2.micro"
   availability_zone = "us-east-1a"
+  key_name      = "my-key-pair"
 
   user_data = <<-EOF
               #!/bin/bash
