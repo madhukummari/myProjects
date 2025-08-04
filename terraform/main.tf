@@ -63,3 +63,59 @@ resource "aws_volume_attachment" "ebs_attach" {
   volume_id   = aws_ebs_volume.additional_volume.id
   instance_id = aws_instance.web.id
 }
+
+############################################ Phase 3 : event trigger restoration ######################################
+resource "aws_cloudwatch_event_target" "log_target" {
+  rule      = aws_cloudwatch_event_rule.snapshot_complete.name
+  target_id = "send-to-cloudwatch"
+  arn       = aws_cloudwatch_log_group.snapshot_event_log_group.arn
+  role_arn  = aws_iam_role.eventbridge_logs_role.arn
+}
+
+resource "aws_iam_role" "eventbridge_logs_role" {
+  name = "eventbridge-logs-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "events.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "eventbridge_logs_policy" {
+  name = "eventbridge-logs-policy"
+  role = aws_iam_role.eventbridge_logs_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Action = [
+        "logs:PutLogEvents",
+        "logs:CreateLogStream"
+      ],
+      Resource = "${aws_cloudwatch_log_group.snapshot_event_log_group.arn}:*"
+    }]
+  })
+}
+
+
+resource "aws_cloudwatch_event_rule" "snapshot_complete" {
+  name        = "snapshot-complete-rule"
+  description = "Triggers when an AWS Backup job completes for our vault"
+
+  event_pattern = jsonencode({
+    source      = ["aws.backup"],
+    "detail-type": ["Backup Job State Change"],
+    detail      = {
+      state            = ["COMPLETED"],
+      backupVaultName  = [aws_backup_vault.main.name],
+      resourceType     = ["EBS"]
+    }
+  })
+}
