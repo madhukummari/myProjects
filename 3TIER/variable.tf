@@ -92,4 +92,25 @@ variable "skip_final_snapshot" {
   type        = bool
   default     = true
 }
+variable "identifier" {
+  description = "A unique name for the resource. If omitted, Terraform will assign a random, unique identifier."
+  type        = string    
+  
+}
+variable "instance_class" {
+  description = "The instance class to use for the EC2 instances"
+  type        = string
+}
+variable "allocated_storage" {
+  description = "The amount of storage to allocate for the EC2 instances"
+  type        = string
+}
+variable "engine" {
+  description = "The database engine to use for the RDS instance"
+  type        = string
+}
+variable "engine_version" {
+  description = "The version of the database engine to use for the RDS instance"
+  type        = string
+}
 

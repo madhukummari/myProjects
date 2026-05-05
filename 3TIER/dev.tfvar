@@ -21,7 +21,7 @@ private_rt = "app-private_rt"
 instance_type = "t3.micro"
 
 identifier = ""
-allocated_storage = ""
+allocated_storage =""
 engine = ""
 engine_version = ""
 instance_class = ""

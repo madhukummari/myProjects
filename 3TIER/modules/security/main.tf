@@ -100,24 +100,27 @@ resource "aws_security_group" "security_groups" {
   for_each = local.layers
 
   name        = "${var.project_name}-${each.key}-sg"
-  description = "Security group for ${each.key} layer"
+  description = "Security group for ${each.key}"
   vpc_id      = var.vpc_id
-  dynamic "ingress" {
-    for_each = each.value.ports
-    content {
-      from_port       = ingress.value
-      to_port         = ingress.value
-      protocol        = "tcp"
-      cidr_blocks     = each.value.source_cidr != null ? [each.value.source_cidr] : null                                          # aws_security_group.security_groups[web].id terraform reads resources like this
-      security_groups = each.value.source_layer != null ? [aws_security_group.security_groups[each.value.source_layer].id] : null # reference  chat in chat gpt "Terraform AZ Logic"
-    }
-  }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-
   }
+}
+resource "aws_security_group_rule" "ingress_rules" {
+  for_each = {
+    for layer, config in local.layers :
+    layer => config if try(config.source_layer, null) != null
+  }
+
+  type                     = "ingress"
+  from_port                = each.value.ports[0]
+  to_port                  = each.value.ports[0]
+  protocol                 = "tcp"
+
+  security_group_id        = aws_security_group.security_groups[each.key].id
+  source_security_group_id = aws_security_group.security_groups[each.value.source_layer].id
 }

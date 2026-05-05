@@ -35,7 +35,7 @@ module "web" {
 
   public_subnet_ids = module.vpc.publicsubnet_ids
   role              = module.security.SSM_role_name
-  security_groups   = module.security.sg-outs["web"]
+  security_groups   = [module.security.sg-outs["web"]]
   instance_type     = var.instance_type
 }
 
@@ -44,7 +44,7 @@ module "app" {
 
   private_subnet_ids = module.vpc.privatesubnet_ids
   role               = module.security.SSM_role_name
-  security_groups    = module.security.sg-outs["app"]
+  security_groups    = [module.security.sg-outs["app"]]
   instance_type      = var.instance_type
 }
 module "db" {
@@ -55,8 +55,8 @@ module "db" {
   engine_version         = var.db_engine_version
   instance_class         = var.db_instance_class
   db_name                = var.db_name
-  vpc_security_group_ids = module.security.sg-outs["db"]
+  vpc_security_group_ids = [module.security.sg-outs["db"]]
   skip_final_snapshot    = var.skip_final_snapshot
-  db_subnet_ids          = module.vpc.db_subnet_ids
+  db_subnet_ids          = values(module.vpc.db_subnet_ids)
 }
 
