@@ -46,9 +46,9 @@ variable "az_b" {
 }
 variable "public_rt" {
   type = string
-  
+
 }
 variable "private_rt" {
   type = string
-  
+
 }

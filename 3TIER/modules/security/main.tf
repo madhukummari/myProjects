@@ -1,7 +1,7 @@
 
 ####################### NACL for VPC ##########################
 resource "aws_network_acl" "nacl" {
-    vpc_id = var.vpc_id
+  vpc_id = var.vpc_id
 }
 resource "aws_network_acl_rule" "inbound_ssh" {
   network_acl_id = aws_network_acl.nacl.id
@@ -47,28 +47,28 @@ resource "aws_network_acl_rule" "outbound_all" {
 
 ################################ IAM Role for SSM ##########################
 data "aws_iam_policy" "ssmpolicy" {
-    arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" 
+  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_role" "ssmrole" {
-    name = "SSMRole"
-    assume_role_policy = jsonencode(({
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Action": "sts:AssumeRole",
-                "Principal": {
-                    "Service": "ec2.amazonaws.com"
+  name = "SSMRole"
+  assume_role_policy = jsonencode(({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : "sts:AssumeRole",
+        "Principal" : {
+          "Service" : "ec2.amazonaws.com"
 
-                }
-            }
-        ]
-    }))
-  
+        }
+      }
+    ]
+  }))
+
 }
 resource "aws_iam_role_policy_attachment" "ssmattachment" {
-    role = aws_iam_role.ssmrole.name
-    policy_arn = data.aws_iam_policy.ssmpolicy.arn
+  role       = aws_iam_role.ssmrole.name
+  policy_arn = data.aws_iam_policy.ssmpolicy.arn
 }
 
 ############################## security group for alb web and app servers ##########################
@@ -105,11 +105,11 @@ resource "aws_security_group" "security_groups" {
   dynamic "ingress" {
     for_each = each.value.ports
     content {
-      from_port   = ingress.value
-      to_port     = ingress.value
-      protocol    = "tcp"
-      cidr_blocks = each.value.source_cidr != null ? [each.value.source_cidr] : null # aws_security_group.security_groups[web].id terraform reads resources like this
-      security_groups = each.value.source_layer != null ? [aws_security_group.security_groups[each.value.source_layer].id] : null  # reference  chat in chat gpt "Terraform AZ Logic"
+      from_port       = ingress.value
+      to_port         = ingress.value
+      protocol        = "tcp"
+      cidr_blocks     = each.value.source_cidr != null ? [each.value.source_cidr] : null                                          # aws_security_group.security_groups[web].id terraform reads resources like this
+      security_groups = each.value.source_layer != null ? [aws_security_group.security_groups[each.value.source_layer].id] : null # reference  chat in chat gpt "Terraform AZ Logic"
     }
   }
 
@@ -118,6 +118,6 @@ resource "aws_security_group" "security_groups" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  
-}
+
+  }
 }

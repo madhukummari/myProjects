@@ -6,8 +6,8 @@ output "privatesubnet_ids" {
   value = aws_subnet.privateSubnets.*.id
 }
 output "db_subnet_ids" {
-  value = {for key, value in aws_subnet.privateSubnets : key => value.id if contains(key, "db")}
-  
+  value = { for key, value in aws_subnet.privateSubnets : key => value.id if contains(key, "db") }
+
 }
 
 output "vpc_id" {
