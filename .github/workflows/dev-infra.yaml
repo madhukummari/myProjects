@@ -44,7 +44,7 @@ jobs:
         run: terraform validate
 
       - name: Plan
-        run: terraform plan -var-file=dev.tfvars -out=tfplan
+        run: terraform plan -var-file=dev.tfvar -out=tfplan
 
       - name: Upload Plan
         uses: actions/upload-artifact@v4
@@ -75,10 +75,10 @@ jobs:
   #       uses: aws-actions/configure-aws-credentials@v4
   #       with:
   #         role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-  #         aws-region: ap-south-1
+  #         aws-region: ap-south-2
 
   #     - name: Terraform Init
   #       run: terraform init
 
   #     - name: Terraform Apply
-  #       run: terraform apply -auto-approve -var-file=dev.tfvars
+  #       run: terraform apply -auto-approve -var-file=dev.tfvar
