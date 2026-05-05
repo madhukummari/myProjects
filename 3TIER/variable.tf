@@ -94,8 +94,8 @@ variable "skip_final_snapshot" {
 }
 variable "identifier" {
   description = "A unique name for the resource. If omitted, Terraform will assign a random, unique identifier."
-  type        = string    
-  
+  type        = string
+
 }
 variable "instance_class" {
   description = "The instance class to use for the EC2 instances"

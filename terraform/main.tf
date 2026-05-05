@@ -29,10 +29,10 @@ resource "aws_backup_selection" "tag_selection" {
 
 ###################################### Phase 2 : ec2 and volume creation ######################################
 resource "aws_instance" "web" {
-  ami           = "ami-020cba7c55df1f615" # Amazon Linux 2
-  instance_type = "t2.micro"
+  ami               = "ami-020cba7c55df1f615" # Amazon Linux 2
+  instance_type     = "t2.micro"
   availability_zone = "us-east-1a"
-  key_name      = "keypair2025" # Replace with your key pair name
+  key_name          = "keypair2025" # Replace with your key pair name
 
   user_data = <<-EOF
               #!/bin/bash
@@ -110,12 +110,12 @@ resource "aws_cloudwatch_event_rule" "snapshot_complete" {
   description = "Triggers when an AWS Backup job completes for our vault"
 
   event_pattern = jsonencode({
-    source      = ["aws.backup"],
-    "detail-type": ["Backup Job State Change"],
-    detail      = {
-      state            = ["COMPLETED"],
-      backupVaultName  = [aws_backup_vault.main.name],
-      resourceType     = ["EBS"]
+    source = ["aws.backup"],
+    "detail-type" : ["Backup Job State Change"],
+    detail = {
+      state           = ["COMPLETED"],
+      backupVaultName = [aws_backup_vault.main.name],
+      resourceType    = ["EBS"]
     }
   })
 }

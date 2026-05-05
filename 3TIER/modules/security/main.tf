@@ -116,10 +116,10 @@ resource "aws_security_group_rule" "ingress_rules" {
     layer => config if try(config.source_layer, null) != null
   }
 
-  type                     = "ingress"
-  from_port                = each.value.ports[0]
-  to_port                  = each.value.ports[0]
-  protocol                 = "tcp"
+  type      = "ingress"
+  from_port = each.value.ports[0]
+  to_port   = each.value.ports[0]
+  protocol  = "tcp"
 
   security_group_id        = aws_security_group.security_groups[each.key].id
   source_security_group_id = aws_security_group.security_groups[each.value.source_layer].id
