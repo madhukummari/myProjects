@@ -1,6 +1,6 @@
-region = "us-east-1"
+region = "ap-south-2"
 
-project_name = "stationary-app"
+project_name = "finance-infra"
 
 vpc_cidr = "10.0.0.0/16"
 
@@ -13,7 +13,16 @@ app_subnet_b_cidr = "10.0.12.0/24"
 db_subnet_a_cidr = "10.0.21.0/24"
 db_subnet_b_cidr = "10.0.22.0/24"
 
-az_a = "us-east-1a"
-az_b = "us-east-1b"
+az_a = "ap-south-2a"
+az_b = "ap-south-2b"
 public_rt = "app-public-rt"
 private_rt = "app-private_rt"
+
+instance_type = "t3.micro"
+
+identifier = ""
+allocated_storage = ""
+engine = ""
+engine_version = ""
+instance_class = ""
+db_name = ""
