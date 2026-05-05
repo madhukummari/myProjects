@@ -2,8 +2,9 @@ import json
 import urllib3
 import os
 
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+
 def lambda_handler(event, context):
-    GITHUB_TOKEN = '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'
     REPO = 'madhukummari/myProjects'
     WORKFLOW = 'monitor-workflow.yaml'  # e.g., my-workflow.yml
 
