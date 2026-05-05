@@ -1,0 +1,83 @@
+name: dev-deploy
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+
+  # PLAN STAGE
+  plan:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: 3TIER
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ap-south-2
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Format Check
+        run: terraform fmt -check
+
+      - name: Validate
+        run: terraform validate
+
+      - name: Plan
+        run: terraform plan -var-file=dev.tfvars -out=tfplan
+
+      - name: Upload Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: 3TIER/tfplan
+
+
+  # # APPLY STAGE (only on main)
+  # apply:
+  #   needs: plan
+  #   runs-on: ubuntu-latest
+
+  #   if: github.ref == 'refs/heads/main'
+
+  #   defaults:
+  #     run:
+  #       working-directory: 3TIER
+
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v3
+
+  #     - name: Configure AWS (OIDC)
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+  #         aws-region: ap-south-1
+
+  #     - name: Terraform Init
+  #       run: terraform init
+
+  #     - name: Terraform Apply
+  #       run: terraform apply -auto-approve -var-file=dev.tfvars
